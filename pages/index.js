@@ -1,209 +1,164 @@
-import Head from 'next/head'
+import React, { useState } from 'react'
+import { makeStyles } from '@material-ui/core/styles'
+import { Button, InputLabel, MenuItem, FormControl, Select, TextField } from '@material-ui/core'
+import Typography from '@material-ui/core/Typography'
+import axios from 'axios'
 
-export default function Home() {
-  return (
-    <div className="container">
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+const options = [
+  {label: "Không chọn", value: null},
+  {label: "Ngân hàng VNPAYQR", value: "VNPAYQR"},
+  {label: "Ngân hàng NCB", value: "NCB"},
+  {label: "Ngân hàng SCB", value: "SCB"},
+  {label: "Ngân hàng SACOMBANK", value: "SACOMBANK"},
+  {label: "Ngân hàng EXIMBANK", value: "EXIMBANK"},
+  {label: "Ngân hàng MSBANK", value: "MSBANK"},
+  {label: "Ngân hàng NAMABANK", value: "NAMABANK"},
+  {label: "Ngân hàng VISA", value: "VISA"},
+  {label: "Ngân hàng VNMART", value: "VNMART"},
+  {label: "Ngân hàng VIETINBANK", value: "VIETINBANK"},
+  {label: "Ngân hàng VIETCOMBANK", value: "VIETCOMBANK"},
+  {label: "Ngân hàng HDBANK", value: "HDBANK"},
+  {label: "Ngân hàng DONGABANK", value: "DONGABANK"},
+  {label: "Ngân hàng TPBANK", value: "TPBANK"},
+  {label: "Ngân hàng OJB", value: "OJB"},
+  {label: "Ngân hàng BIDV", value: "BIDV"},
+  {label: "Ngân hàng TECHCOMBANK", value: "TECHCOMBANK"},
+  {label: "Ngân hàng VPBank", value: "VPBANK"},
+  {label: "Ngân hàng AGRIBANK", value: "AGRIBANK"},
+  {label: "Ngân hàng MBBank", value: "MBBANK"},
+  {label: "Ngân hàng ACB", value: "ACB"},
+  {label: "Ngân hàng OCB", value: "OCB"},
+  {label: "Ngân hàng SHB", value: "SHB"},
+  {label: "Ngân hàng IVB", value: "IVB"},
+]
 
-      <main>
-        <h1 className="title">
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+const useStyles = makeStyles(theme => ({
+    card: {
+    display: 'flex'
+  },
+  cardDetails: {
+    flex: 1
+  },
+  cardMedia: {
+    width: 160
+  },
+  btn: {
+    background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
+    color: "white",
+    textTransform: "lowercase"
+  }
+}))
 
-        <p className="description">
-          Get started by editing <code>pages/index.js</code>
-        </p>
 
-        <div className="grid">
-          <a href="https://nextjs.org/docs" className="card">
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
+const Order = () => {
+  const classes = useStyles()
+  const [orderType, setOrderType] = useState("topup")
+  const [amount, setAmount] = useState(10000)
+  const [orderDescription, setOrderDescription] = useState('')
+  const [bankCode, setBankCode] = useState(null)
+  const [language, setLanguage] = useState("vn")
 
-          <a href="https://nextjs.org/learn" className="card">
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
+  function handleChangeOrderType(event) {
+    setOrderType(event.target.value)
+  }
+  function handleAmount(event) {
+    setAmount(event.target.value)
+  }
+  function handleOrderDescription(event) {
+    setOrderDescription(event.target.value)
+  }
+  function handleBankCode(event) {
+    setBankCode(event.target.value)
+  }
+  function handleLanguage(event) {
+    setLanguage(event.target.value)
+  }
+  async function handleClick() {
+    
+    const x = await axios({
+      method: 'post',
+      url: '/api/create_payment_url',
+      data: {
+        orderType,
+        amount,
+        orderDescription,
+        bankCode,
+        language
+      }
+    });
+    
+    if (x) {
+      // console.log(x.data.data)
+      window.location.assign(x.data.data)
+    }  
+  }
 
-          <a
-            href="https://github.com/zeit/next.js/tree/master/examples"
-            className="card"
+  return  (
+    <div className="w-full p-64 pt-16 h-full">
+      <div className="flex justify-between mb-32">
+        <Typography className="text-medium" variant="h4">VNPAY DEMO</Typography>
+        
+      </div>
+      <Typography variant="h4">Tạo mới đơn hàng</Typography>
+      <div className="w-1/2 mt-8">
+        <FormControl variant="outlined" className="w-full" >
+          <InputLabel id="demo-simple-select-outlined-label">Loại hàng hóa</InputLabel>
+          <Select
+            fullWidth
+            labelId="demo-simple-select-outlined-label"
+            id="demo-simple-select-outlined"
+            value={orderType}
+            onChange={handleChangeOrderType}
+            label="Loại hàng hóa"
           >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className="card"
+            <MenuItem value={"topup"}>Nạp tiền điện thoại</MenuItem>
+            <MenuItem value={"billpayment"}>Thanh toán hóa đơn</MenuItem>
+            <MenuItem value={"fashion"}>Thời trang</MenuItem>
+          </Select>
+        </FormControl>
+      </div>
+      <div className="w-1/2 mt-8">
+          <TextField fullWidth id="outlined-basic" type="number" label="Số tiền" variant="outlined" value={amount} onChange={handleAmount} />
+      </div>
+      <div className="w-1/2 mt-8">
+          <TextField multiline rows={4} value={orderDescription} onChange={handleOrderDescription} fullWidth id="outlined-basic" label="Nội dung thanh toán" variant="outlined" />
+      </div>
+      <div className="w-1/2 mt-8">
+        <FormControl variant="outlined" className="w-full" >
+          <InputLabel id="demo-simple-select-outlined-label">Ngân hàng</InputLabel>
+          <Select
+            fullWidth
+            labelId="demo-simple-select-outlined-label"
+            id="demo-simple-select-outlined"
+            value={bankCode}
+            onChange={handleBankCode}
+            label="Ngân hàng"
           >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className="logo" />
-        </a>
-      </footer>
-
-      <style jsx>{`
-        .container {
-          min-height: 100vh;
-          padding: 0 0.5rem;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
-
-        main {
-          padding: 5rem 0;
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
-
-        footer {
-          width: 100%;
-          height: 100px;
-          border-top: 1px solid #eaeaea;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-
-        footer img {
-          margin-left: 0.5rem;
-        }
-
-        footer a {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-
-        a {
-          color: inherit;
-          text-decoration: none;
-        }
-
-        .title a {
-          color: #0070f3;
-          text-decoration: none;
-        }
-
-        .title a:hover,
-        .title a:focus,
-        .title a:active {
-          text-decoration: underline;
-        }
-
-        .title {
-          margin: 0;
-          line-height: 1.15;
-          font-size: 4rem;
-        }
-
-        .title,
-        .description {
-          text-align: center;
-        }
-
-        .description {
-          line-height: 1.5;
-          font-size: 1.5rem;
-        }
-
-        code {
-          background: #fafafa;
-          border-radius: 5px;
-          padding: 0.75rem;
-          font-size: 1.1rem;
-          font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
-            DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
-        }
-
-        .grid {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-wrap: wrap;
-
-          max-width: 800px;
-          margin-top: 3rem;
-        }
-
-        .card {
-          margin: 1rem;
-          flex-basis: 45%;
-          padding: 1.5rem;
-          text-align: left;
-          color: inherit;
-          text-decoration: none;
-          border: 1px solid #eaeaea;
-          border-radius: 10px;
-          transition: color 0.15s ease, border-color 0.15s ease;
-        }
-
-        .card:hover,
-        .card:focus,
-        .card:active {
-          color: #0070f3;
-          border-color: #0070f3;
-        }
-
-        .card h3 {
-          margin: 0 0 1rem 0;
-          font-size: 1.5rem;
-        }
-
-        .card p {
-          margin: 0;
-          font-size: 1.25rem;
-          line-height: 1.5;
-        }
-
-        .logo {
-          height: 1em;
-        }
-
-        @media (max-width: 600px) {
-          .grid {
-            width: 100%;
-            flex-direction: column;
-          }
-        }
-      `}</style>
-
-      <style jsx global>{`
-        html,
-        body {
-          padding: 0;
-          margin: 0;
-          font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-            Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
-            sans-serif;
-        }
-
-        * {
-          box-sizing: border-box;
-        }
-      `}</style>
+            {options.map((item,ind) => {
+              return <MenuItem key={ind} value={item.value}>{item.label}</MenuItem>
+            })}
+          </Select>
+        </FormControl>
+      </div>
+      <div className="w-1/2 mt-8 mb-12">
+        <FormControl variant="outlined" className="w-full" >
+          <InputLabel id="demo-simple-select-outlined-label">Ngôn ngữ</InputLabel>
+          <Select
+            fullWidth
+            labelId="demo-simple-select-outlined-label"
+            id="demo-simple-select-outlined"
+            value={language}
+            onChange={handleLanguage}
+            label="Ngôn ngữ"
+          >
+              <MenuItem value="vn">Tiếng Việt</MenuItem>
+              <MenuItem value="en">English</MenuItem>
+          </Select>
+        </FormControl>
+      </div>
+      <Button variant="contained" onClick={handleClick} className={classes.btn}>Thanh toán</Button>
     </div>
   )
 }
+
+export default Order
