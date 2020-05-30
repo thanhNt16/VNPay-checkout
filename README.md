@@ -28,3 +28,36 @@ You can check out [the Next.js GitHub repository](https://github.com/zeit/next.j
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/import?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+#Test Card
+1
+Ngân hàng: NCB
+Số thẻ: 9704198526191432198
+Tên chủ thẻ:NGUYEN VAN A
+Ngày phát hành:07/15
+Mật khẩu OTP:123456
+Thành công
+2
+Ngân hàng: NCB
+Số thẻ: 9704195798459170488
+Tên chủ thẻ:NGUYEN VAN A
+Ngày phát hành:07/15
+Thẻ không đủ số dư
+3
+Ngân hàng: NCB
+Số thẻ: 9704192181368742
+Tên chủ thẻ:NGUYEN VAN A
+Ngày phát hành:07/15
+Thẻ chưa kích hoạt
+4
+Ngân hàng: NCB
+Số thẻ: 9704193370791314
+Tên chủ thẻ:NGUYEN VAN A
+Ngày phát hành:07/15
+Thẻ bị khóa
+5
+Ngân hàng: NCB
+Số thẻ: 9704194841945513
+Tên chủ thẻ:NGUYEN VAN A
+Ngày phát hành:07/15
+Thẻ bị hết hạn
